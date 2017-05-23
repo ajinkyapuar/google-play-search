@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.template import loader
 
 import requests
-
+from bs4 import BeautifulSoup
 
 def index(request):
     template = loader.get_template('index.html')
@@ -17,8 +17,15 @@ def index(request):
     webRequest = requests.get('https://play.google.com/store/search?q=' + query)
     # print webRequest
     if webRequest.status_code == requests.codes.ok:
-        print "*** Web Request Successfull ***"
-        print webRequest.text
+        # print "*** Web Request Successfull ***"
+        # print webRequest.text
+        page = webRequest.text
+        soup = BeautifulSoup(page)
+        print soup.find_all('div', {"class": "card"})
+        for card in soup.find_all('div', {"class": "card"}):
+            print "**********"
+            print card
+            print "**********"
     else:
         print "*** Web Request Not Successfull ***"
 
