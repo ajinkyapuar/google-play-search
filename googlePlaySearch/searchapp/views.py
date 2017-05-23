@@ -15,34 +15,17 @@ def index(request):
     query = request.GET.get('query')
     # print query
     webRequest = requests.get('https://play.google.com/store/search?q=' + query)
-    # print webRequest
     if webRequest.status_code == requests.codes.ok:
-        # print "*** Web Request Successfull ***"
-        # print webRequest.text
         page = webRequest.text
         soup = BeautifulSoup(page)
-        print soup.find_all('div', {"class": "card"})
         for card in soup.find_all('div', {"class": "card"}):
-            print "**********"
-            print card
-            print "**********"
-    else:
-        print "*** Web Request Not Successfull ***"
-
+            print "********* Begin App Data *********"
+            print "AppID: " + card['data-docid']
+            print "AppName: " + card.find('a', {"class": "title"}).text
+            print "DeveloperName: " + card.find('a', {"class": "subtitle"}).text
+            print "********* End App Data *********"
     context = {
-        # 'latest_question_list': latest_question_list,
+        # 'app_list': app_list,
     }
-    print context
+    # print context
     return HttpResponse(template.render(context, request))
-    # return HttpResponse("Hello! Search App initialized")
-
-    # def searchResults(request):
-    #     drname = request.GET.get('searchParam')
-    #     print request
-    #     print drname
-    #     # doctors = Doctor.objects.filter(name__contains=drname)
-    #     # clinic = Doctor.objects.filter(clinic__name__contains=drname)
-    #     # d = getVariables(request)
-    #     # d['doctors'] = doctors
-    #     # d['doctors_by_clinic'] = doctors
-    #     # return render_to_response('meddy1/doclistings.html',d)
