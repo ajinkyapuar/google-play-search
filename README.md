@@ -1,6 +1,8 @@
 #Google Play Search
 
-URL: http://localhost:8000/searchapp/?query=
+Assignment URL: https://gist.github.com/dhilipsiva/ef02418d163c8fb4afbe020682d2b0a1
+
+URL: http://localhost:8000/searchapp/?query=asdf
 
 RUN SERVER: python manage.py runserver
 
