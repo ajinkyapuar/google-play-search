@@ -9,4 +9,8 @@ from django.template import loader
 
 def index(request):
     template = loader.get_template('index.html')
-    return HttpResponse("Hello! Search App initialized")
+    context = {
+        # 'latest_question_list': latest_question_list,
+    }
+    return HttpResponse(template.render(context, request))
+    # return HttpResponse("Hello! Search App initialized")
