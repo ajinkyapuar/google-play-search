@@ -10,3 +10,7 @@ RUN SERVER: python manage.py runserver
 - python manage.py migrate
 - python manage.py runserver
 - python manage.py startapp searchapp
+- python manage.py makemigrations searchapp 
+- python manage.py sqlmigrate searchapp 0001
+- 
+

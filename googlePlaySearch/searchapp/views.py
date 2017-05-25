@@ -18,11 +18,15 @@ def index(request):
     if webRequest.status_code == requests.codes.ok:
         page = webRequest.text
         soup = BeautifulSoup(page)
-        for card in soup.find_all('div', {"class": "card"}):
+        cards = soup.find_all('div', {"class": "card"})
+        # count = 1
+        for card in cards[:10]:
             print "********* Begin App Data *********"
+            # print count
             print "AppID: " + card['data-docid']
             print "AppName: " + card.find('a', {"class": "title"}).text
             print "DeveloperName: " + card.find('a', {"class": "subtitle"}).text
+            # count+=1
             print "********* End App Data *********"
     context = {
         # 'app_list': app_list,
