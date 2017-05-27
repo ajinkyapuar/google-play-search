@@ -8,6 +8,9 @@ class Queries(models.Model):
     query_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
 
+    def __str__(self):  # __unicode__ on Python 2
+        return self.query_text
+
     def is_duplicate(self):
         # TODO: check if duplicate query
         return
@@ -19,3 +22,6 @@ class Results(models.Model):
     app_id = models.CharField(max_length=200)
     app_name = models.CharField(max_length=200)
     dev_name = models.CharField(max_length=200)
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.app_name
