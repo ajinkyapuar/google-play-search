@@ -17,6 +17,8 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+    # TODO: Add home page for root url i.e. localhost:8000
+    # url(r'^', views.index, name='index'),
     url(r'^admin/', admin.site.urls),
     url(r'^searchapp/', include('searchapp.urls')),
 ]
