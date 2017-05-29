@@ -6,15 +6,15 @@
 </form>
 
 {% if query %}
-<div>You searched for: {{ query }} </div>
+<div>Search results for: {{ query }} </div>
 {% endif %}
 
-<!--{% if app_list %}-->
-    <!--<ul>-->
-    <!--{% for app in app_list %}-->
-        <!--<li>{{ app.app_id }}</li>-->
-    <!--{% endfor %}-->
-    <!--</ul>-->
-<!--{% else %}-->
-    <!--<p>No results are available.</p>-->
-<!--{% endif %}-->
+{% if app_list %}
+    <ul>
+    {% for app in app_list %}
+        <li>{{ app.app_name }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No results are available.</p>
+{% endif %}
