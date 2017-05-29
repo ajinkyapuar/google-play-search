@@ -32,38 +32,44 @@ def index(request):
     #         print "********* End App Data *********"
 
     # queries = Queries.objects.all()
-    # queries = Queries.objects.filter(query_text = query)
+
 
     try:
-        # question = Question.objects.get(pk=question_id)
-        # queries = Queries.objects.get(query_text=query)
         queries = Queries.objects.filter(query_text=query)
-        # print [q.id for q in Queries.objects.filter(query_text=query)]
-        q_id = [q.id for q in Queries.objects.filter(query_text=query)]
-        print q_id
-
-        results = Results.objects.filter(query_id = q_id[0])
-        print results
-
+        # print queries
+        if not queries:
+            print "****** NOT FOUND!!! ******"
+            # TODO: Web request and scrape data here
+            # TODO: Insert data into db and display
+            # webRequest = requests.get('https://play.google.com/store/search?q=' + query)
+            # if webRequest.status_code == requests.codes.ok:
+            #     page = webRequest.text
+            #     soup = BeautifulSoup(page)
+            #     cards = soup.find_all('div', {"class": "card"})
+            #     # count = 1
+            #     for card in cards[:10]:
+            #         print "********* Begin App Data *********"
+            #         # print count
+            #         print "AppID: " + card['data-docid']
+            #         print "AppName: " + card.find('a', {"class": "title"}).text
+            #         print "DeveloperName: " + card.find('a', {"class": "subtitle"}).text
+            #         # count+=1
+            #         print "********* End App Data *********"
+        else:
+            print "****** FOUND!!! ******"
+            # queries = Queries.objects.filter(query_text=query)
+            # print queries
+            # print [q.id for q in Queries.objects.filter(query_text=query)]
+            q_id = [q.id for q in queries]
+            print q_id
+            results = Results.objects.filter(query_id = q_id[0])
+            # print results
+            if not results:
+                print "****** RESULTS NOT FOUND!!! ******"
+            else:
+                print "****** RESULTS FOUND!!! ******"
     except Queries.DoesNotExist:
         print "****** Query doesn't exsist! ******"
-        # webRequest = requests.get('https://play.google.com/store/search?q=' + query)
-        # if webRequest.status_code == requests.codes.ok:
-        #     page = webRequest.text
-        #     soup = BeautifulSoup(page)
-        #     cards = soup.find_all('div', {"class": "card"})
-        #     # count = 1
-        #     for card in cards[:10]:
-        #         print "********* Begin App Data *********"
-        #         # print count
-        #         print "AppID: " + card['data-docid']
-        #         print "AppName: " + card.find('a', {"class": "title"}).text
-        #         print "DeveloperName: " + card.find('a', {"class": "subtitle"}).text
-        #         # count+=1
-        #         print "********* End App Data *********"
-        # TODO: Web request and scrape data here
-        # TODO: Insert data into db and display
-
 
     context = {
         # 'app_list': app_list,
