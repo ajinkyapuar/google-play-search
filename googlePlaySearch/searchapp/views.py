@@ -104,7 +104,7 @@ def index(request):
     context = {
         'app_list': results,
     }
-    print context
+    # print context
     return HttpResponse(template.render(context, request))
 
 
