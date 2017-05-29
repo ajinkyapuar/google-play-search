@@ -11,11 +11,6 @@ class Queries(models.Model):
     def __str__(self):  # __unicode__ on Python 2
         return self.query_text
 
-    def is_duplicate(self):
-        # TODO: check if duplicate query
-        return
-        # return self.query_text == Quer
-
 
 class Results(models.Model):
     query_id = models.ForeignKey(Queries, on_delete=models.CASCADE)
