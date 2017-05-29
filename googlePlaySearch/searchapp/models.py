@@ -19,4 +19,5 @@ class Results(models.Model):
     dev_name = models.CharField(max_length=200)
 
     def __str__(self):  # __unicode__ on Python 2
-        return self.app_name
+        return self.app_id
+               # self.app_name, self.dev_name
