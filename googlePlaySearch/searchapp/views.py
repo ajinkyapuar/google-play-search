@@ -77,15 +77,16 @@ def scrapeGooglePlayStore(query, qId):
                         app_name=card.find('a', {"class": "title"}).text,
                         dev_name=card.find('a', {"class": "subtitle"}).text)
             r.save()
-            print(r.id)
+            # print(r.id)
             # time.sleep(10)
 
             # print("********* End App Data *********")
     else:
         print("******* Status Code Error ******")
 
-def details(request):
+def details(request, pk):
     template = loader.get_template('details.html')
+    print(pk)
     context = {}
     return HttpResponse(template.render(context))
 #################################################################################################################################
