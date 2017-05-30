@@ -12,7 +12,6 @@
 {% if app_list %}
     <ul>
     {% for app in app_list %}
-        <li><a href="details/">{{ app.app_name }}</a></li>
         <li><a href="{% url 'details' pk=app.id %}">{{ app.app_name }}</a></li>
     {% endfor %}
     </ul>
