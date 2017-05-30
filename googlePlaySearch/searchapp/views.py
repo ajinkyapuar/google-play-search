@@ -87,7 +87,9 @@ def scrapeGooglePlayStore(query, qId):
 def details(request, pk):
     template = loader.get_template('details.html')
     print(pk)
-    context = {}
+    results = Results.objects.filter(id=pk)
+    print(results)
+    context = { 'details' : results}
     return HttpResponse(template.render(context))
 #################################################################################################################################
 

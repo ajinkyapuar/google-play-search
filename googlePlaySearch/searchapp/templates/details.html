@@ -1,2 +1,9 @@
 <h1>Google Play Search</h1>
 
+{% if details %}
+ {% for d in details %}
+    <div> {{d.app_name}} </div><br />
+    <div> {{d.app_id}} </div><br />
+    <div> {{d.dev_name}} </div><br />
+ {% endfor %}
+{% endif %}
