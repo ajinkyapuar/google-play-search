@@ -19,12 +19,13 @@ def index(request):
     template = loader.get_template('index.html')
     results = {}
     context = {}
-    query = request.GET.get('query').lower()
+    query = request.GET.get('query')
     if not query:
         context = {
             'error': 'Search Term cannot be empty',
         }
         return HttpResponse(template.render(context))
+    query = query.lower()
     if len(query.split(" ")) >= 2:
         print("****** Query can contain only one word ******")
         context = {
