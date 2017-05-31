@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
+# from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
@@ -37,17 +37,18 @@ def index(request):
         results = Results.objects.filter(query_id=q.id)
     else:
         print("****** QUERY FOUND!!! ******")
+        # print(queries)
         q_id = [q.id for q in queries]
         # print(q_id)
         results = Results.objects.filter(query_id=q_id[0])
-        # print(results)
+        # # print(results)
         if not results:
             print("****** RESULTS NOT FOUND!!! ******")
-            scrapeGooglePlayStore(query, q_id)
-            time.sleep(10)
-            results = Results.objects.filter(query_id=q_id[0])
-        # else:
-        #     print("****** RESULTS FOUND!!! ******")
+            scrapeGooglePlayStore(query, q_id[0])
+        #     time.sleep(10)
+        #     results = Results.objects.filter(query_id=q_id[0])
+            # else:
+            #     print("****** RESULTS FOUND!!! ******")
 
     # print(results)
     context = {
@@ -60,23 +61,53 @@ def index(request):
 def scrapeGooglePlayStore(query, qId):
     print("****** Scrapping Google Play Store ******")
     webRequest = requests.get('https://play.google.com/store/search?q=' + query)
+    print(webRequest.status_code)
     if webRequest.status_code == requests.codes.ok:
         page = webRequest.text
         soup = BeautifulSoup(page)
         cards = soup.find_all('div', {"class": "card"})
-        # count = 1
-        for card in cards[:10]:
-            # print("********* Begin App Data *********")
+        count = 1
+        # print(type(qId) , qId)
+        for card in cards:
+            if count <= 10:
+                # print(count)
+                # print(card.find('a', {"class": "subtitle"}))
+                if card.find('a', {"class": "subtitle"}) is not None:
+                    print("Dev Name found")
+                    # print type(qId), qId
+                    r = Results(query_id_id=qId,
+                                app_id=card['data-docid'],
+                                app_name=card.find('a', {"class": "title"}).text,
+                                dev_name=card.find('a', {"class": "subtitle"}).text)
+                    r.save()
+                    count+=1
+            else:
+                # print("*** 10 entries exceeded ***")
+                break
+
             # # print(count)
             # print("AppID: " + card['data-docid'])
             # print("AppName: " + card.find('a', {"class": "title"}).text)
             # print("DeveloperName: " + card.find('a', {"class": "subtitle"}).text)
             # count+=1
             # print qId
-            r = Results(query_id_id=qId, app_id=card['data-docid'],
-                        app_name=card.find('a', {"class": "title"}).text,
-                        dev_name=card.find('a', {"class": "subtitle"}).text)
-            r.save()
+
+            # print()
+            # AppID = card['data-docid']
+            # AppName = card.find('a', {"class": "title"}).text
+            # DeveloperName = card.find('a', {"class": "subtitle"})
+            # if card.find('a', {"class": "subtitle"}):
+            #     # print("Dev Name found")
+            #     r = Results(query_id_id=qId, app_id=card['data-docid'],
+            #                     app_name=card.find('a', {"class": "title"}).text,
+            #                     dev_name=card.find('a', {"class": "subtitle"}).text)
+            # else:
+            #     print("Dev Name not found")
+            #     r = Results(query_id_id=qId, app_id=card['data-docid'],
+            #                 app_name=card.find('a', {"class": "title"}).text,
+            #                 dev_name= "NONE")
+            # r.save()
+
             # print(r.id)
             # time.sleep(10)
 
@@ -84,13 +115,15 @@ def scrapeGooglePlayStore(query, qId):
     else:
         print("******* Status Code Error ******")
 
+
 def details(request, pk):
     template = loader.get_template('details.html')
     print(pk)
     results = Results.objects.filter(id=pk)
     print(results)
-    context = { 'details' : results}
+    context = {'details': results}
     return HttpResponse(template.render(context))
+
 #################################################################################################################################
 
 
