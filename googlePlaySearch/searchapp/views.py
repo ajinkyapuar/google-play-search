@@ -14,43 +14,29 @@ from .models import Queries, Results
 
 from django.utils import timezone
 
-import time
-
 
 def index(request):
-    # print("****** REQUEST FOUND ******")
     template = loader.get_template('index.html')
     results = {}
     context = {}
     query = request.GET.get('query')
     if not query:
         return HttpResponse(template.render(context))
-    # print(query)
     queries = Queries.objects.filter(query_text=query)
     print(queries)
     if not queries:
         print("****** QUERY NOT FOUND!!! ******")
         q = Queries(query_text=query, pub_date=timezone.now())
         q.save()
-        # print(q.id)
         scrapeGooglePlayStore(query, q.id)
         results = Results.objects.filter(query_id=q.id)
     else:
         print("****** QUERY FOUND!!! ******")
-        # print(queries)
         q_id = [q.id for q in queries]
-        # print(q_id)
         results = Results.objects.filter(query_id=q_id[0])
-        # # print(results)
         if not results:
             print("****** RESULTS NOT FOUND!!! ******")
             scrapeGooglePlayStore(query, q_id[0])
-        #     time.sleep(10)
-        #     results = Results.objects.filter(query_id=q_id[0])
-            # else:
-            #     print("****** RESULTS FOUND!!! ******")
-
-    # print(results)
     context = {
         'query': query,
         'app_list': results,
@@ -67,11 +53,8 @@ def scrapeGooglePlayStore(query, qId):
         soup = BeautifulSoup(page)
         cards = soup.find_all('div', {"class": "card"})
         count = 1
-        # print(type(qId) , qId)
         for card in cards:
             if count <= 10:
-                # print(count)
-                # print(card.find('a', {"class": "subtitle"}))
                 if card.find('a', {"class": "subtitle"}) is not None:
                     print("Dev Name found")
                     # print type(qId), qId
@@ -80,47 +63,19 @@ def scrapeGooglePlayStore(query, qId):
                                 app_name=card.find('a', {"class": "title"}).text,
                                 dev_name=card.find('a', {"class": "subtitle"}).text)
                     r.save()
-                    count+=1
+                    count += 1
             else:
-                # print("*** 10 entries exceeded ***")
                 break
-
-            # # print(count)
-            # print("AppID: " + card['data-docid'])
-            # print("AppName: " + card.find('a', {"class": "title"}).text)
-            # print("DeveloperName: " + card.find('a', {"class": "subtitle"}).text)
-            # count+=1
-            # print qId
-
-            # print()
-            # AppID = card['data-docid']
-            # AppName = card.find('a', {"class": "title"}).text
-            # DeveloperName = card.find('a', {"class": "subtitle"})
-            # if card.find('a', {"class": "subtitle"}):
-            #     # print("Dev Name found")
-            #     r = Results(query_id_id=qId, app_id=card['data-docid'],
-            #                     app_name=card.find('a', {"class": "title"}).text,
-            #                     dev_name=card.find('a', {"class": "subtitle"}).text)
-            # else:
-            #     print("Dev Name not found")
-            #     r = Results(query_id_id=qId, app_id=card['data-docid'],
-            #                 app_name=card.find('a', {"class": "title"}).text,
-            #                 dev_name= "NONE")
-            # r.save()
-
-            # print(r.id)
-            # time.sleep(10)
-
-            # print("********* End App Data *********")
     else:
         print("******* Status Code Error ******")
+    print("****** Scrapping Completed! Data Saved to DB ******")
 
 
 def details(request, pk):
     template = loader.get_template('details.html')
-    print(pk)
+    # print(pk)
     results = Results.objects.filter(id=pk)
-    print(results)
+    # print(results)
     context = {'details': results}
     return HttpResponse(template.render(context))
 
