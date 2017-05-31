@@ -21,9 +21,18 @@ def index(request):
     context = {}
     query = request.GET.get('query').lower()
     if not query:
+        context = {
+            'error': 'Search Term cannot be empty',
+        }
+        return HttpResponse(template.render(context))
+    # print(len(query.split(" ")))
+    if len(query.split(" ")) >= 2:
+        print("****** Query can containt only one word ******")
+        context = {
+            'error': 'Search Term should be one word only',
+        }
         return HttpResponse(template.render(context))
     queries = Queries.objects.filter(query_text=query)
-    print(queries)
     if not queries:
         print("****** QUERY NOT FOUND!!! ******")
         q = Queries(query_text=query, pub_date=timezone.now())
