@@ -19,7 +19,7 @@ def index(request):
     template = loader.get_template('index.html')
     results = {}
     context = {}
-    query = request.GET.get('query')
+    query = request.GET.get('query').lower()
     if not query:
         return HttpResponse(template.render(context))
     queries = Queries.objects.filter(query_text=query)
@@ -56,8 +56,7 @@ def scrapeGooglePlayStore(query, qId):
         for card in cards:
             if count <= 10:
                 if card.find('a', {"class": "subtitle"}) is not None:
-                    print("Dev Name found")
-                    # print type(qId), qId
+                    print("****** Dev Name found ******")
                     r = Results(query_id_id=qId,
                                 app_id=card['data-docid'],
                                 app_name=card.find('a', {"class": "title"}).text,
@@ -73,9 +72,7 @@ def scrapeGooglePlayStore(query, qId):
 
 def details(request, pk):
     template = loader.get_template('details.html')
-    # print(pk)
     results = Results.objects.filter(id=pk)
-    # print(results)
     context = {'details': results}
     return HttpResponse(template.render(context))
 
